@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Все задачи</title>
+</head>
+<body>
+{% for task in tasks_db %}
+    <a href="{{ url_for('tasks.detail_task', id=task.id) }}"><h1> {{ task.title }} </h1></a>
+    <p> {{ task.description }} </p>
+    <hr>
+{% endfor %}
+</body>
+</html>

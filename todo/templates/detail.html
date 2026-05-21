@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% if task_one %}
+    <h1>{{ task_one.0.title }}</h1>
+    <p>{{ task_one.0.description }}</p>
+{% else %}
+    <h1>404 Page not found</h1>
+{% endif %}
+</body>
+</html>

@@ -3,7 +3,7 @@ from todo.routes import task_bp
 
 app = Flask(__name__)
 
-app.register_blueprint(task_bp) #  Регистрация blueprint "task_bp"
+app.register_blueprint(task_bp, url_prefix='/tasks') #  Регистрация blueprint "task_bp"
 
 @app.route('/') # <-- path/путь
 def main(): # <-- вьюха/view | ручка
