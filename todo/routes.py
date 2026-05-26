@@ -27,3 +27,6 @@ def detail_task(id):
             task_one.append(task)
     return render_template('detail.html', task_one=task_one)
 
+
+
+
