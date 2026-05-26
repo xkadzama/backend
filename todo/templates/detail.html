@@ -8,6 +8,9 @@
 {% if task_one %}
     <h1>{{ task_one.0.title }}</h1>
     <p>{{ task_one.0.description }}</p>
+    <form action="{{ url_for('tasks.delete_task', id=task_one.0.id) }}" method="POST">
+        <button>Удалить</button>
+    </form>
 {% else %}
     <h1>404 Page not found</h1>
 {% endif %}
