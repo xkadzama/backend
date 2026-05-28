@@ -28,7 +28,7 @@ def detail_task(id):
             task_one.append(task)
     return render_template('detail.html', task_one=task_one)
 
-
+# CREATE
 @task_bp.route('/add', methods=['GET', 'POST'])  # /tasks/add
 def add_task():
     if request.method == 'POST':
@@ -38,7 +38,29 @@ def add_task():
         return redirect(url_for('tasks.get_all_tasks'))
     return render_template('add_task.html')
 
+# UPDATE
+@task_bp.route('/update/<int:id>', methods=['GET', 'POST'])
+def update_task(id):
+    # ---------------- POST -------------------
+    if request.method == 'POST':
+        title = request.form.get('title')
+        description = request.form.get('description')
+        for task in tasks_db:
+            if task.get('id') == id:
+                if title:
+                    task['title'] = title
+                if description:
+                    task['description'] = description
 
+    # ---------------- GET -------------------
+    task_one = []
+    for task in tasks_db:
+        if task.get('id') == id:
+            task_one.append(task)
+    return render_template('update.html', task_one=task_one)
+
+
+# DELETE
 @task_bp.route('/delete/<int:id>', methods=['POST'])
 def delete_task(id):
     for task in tasks_db:
