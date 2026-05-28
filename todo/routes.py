@@ -41,7 +41,9 @@ def add_task():
 
 @task_bp.route('/delete/<int:id>', methods=['POST'])
 def delete_task(id):
-    print(id)
-    # Удалить задачу из БД по ID
+    for task in tasks_db:
+        if task.get('id') == id:
+            tasks_db.remove(task)
+            break
     return redirect(url_for('tasks.get_all_tasks'))
 
