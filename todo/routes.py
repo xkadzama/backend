@@ -1,32 +1,25 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 
+from database.engine import db
+from database.models.todo import Task
+
 
 task_bp = Blueprint('tasks', __name__, template_folder='templates')
 
-tasks_db = [
-    {'id': 1, 'title': 'Купить хлеб', 'description': 'Успеть до закрытия'},
-    {'id': 2, 'title': 'Заменить масло', 'description': 'Заехать в СТО'},
-    {'id': 3, 'title': 'Выполнить ДЗ', 'description': 'До след. урок'},
-    {'id': 4, 'title': 'Реализовать CRUD', 'description': 'Дедлайн до завтра'},
-
-]
-
-# CRUD - CREATE READ UPDATE DELETE
 
 # READ
 @task_bp.route('/')  # tasks/
 def get_all_tasks():
-    return render_template('tasks.html', tasks_db=tasks_db)
+    tasks = Task.query.all()
+    return render_template('tasks.html', tasks_db=tasks)
 
 
 # READ
 @task_bp.route('/task/<int:id>') # tasks/task/<int:id>
 def detail_task(id):
-    task_one = []
-    for task in tasks_db:
-        if task.get('id') == id:
-            task_one.append(task)
-    return render_template('detail.html', task_one=task_one)
+    task = Task.query.filter_by(id=id).first() # <---
+    return render_template('detail.html', task_one=task)
+
 
 # CREATE
 @task_bp.route('/add', methods=['GET', 'POST'])  # /tasks/add
@@ -34,38 +27,34 @@ def add_task():
     if request.method == 'POST':
         title = request.form.get('title')
         description = request.form.get('description')
-        tasks_db.append({'id': len(tasks_db)+1, 'title': title, 'description': description})
+        task = Task(title=title, description=description) # <---
+        db.session.add(task) # <---
+        db.session.commit() # <---
         return redirect(url_for('tasks.get_all_tasks'))
     return render_template('add_task.html')
 
 # UPDATE
 @task_bp.route('/update/<int:id>', methods=['GET', 'POST'])
 def update_task(id):
+    task = Task.query.filter_by(id=id).first() # <---
     # ---------------- POST -------------------
     if request.method == 'POST':
         title = request.form.get('title')
         description = request.form.get('description')
-        for task in tasks_db:
-            if task.get('id') == id:
-                if title:
-                    task['title'] = title
-                if description:
-                    task['description'] = description
+        if title:
+            task.title = title # <---
+        if description:
+            task.description = description # <---
+        db.session.commit() # <---
 
-    # ---------------- GET -------------------
-    task_one = []
-    for task in tasks_db:
-        if task.get('id') == id:
-            task_one.append(task)
-    return render_template('update.html', task_one=task_one)
+    return render_template('update.html', task_one=task) # <---
 
 
 # DELETE
 @task_bp.route('/delete/<int:id>', methods=['POST'])
 def delete_task(id):
-    for task in tasks_db:
-        if task.get('id') == id:
-            tasks_db.remove(task)
-            break
+    task = Task.query.filter_by(id=id).first()  # <---
+    db.session.delete(task) # <---
+    db.session.commit() # <---
     return redirect(url_for('tasks.get_all_tasks'))
 

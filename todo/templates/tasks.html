@@ -5,10 +5,14 @@
     <title>Все задачи</title>
 </head>
 <body>
-{% for task in tasks_db %}
-    <a href="{{ url_for('tasks.detail_task', id=task.id) }}"><h1> {{ task.title }} </h1></a>
-    <p> {{ task.description }} </p>
-    <hr>
-{% endfor %}
+{% if tasks_db %}
+    {% for task in tasks_db %}
+        <a href="{{ url_for('tasks.detail_task', id=task.id) }}"><h1> {{ task.title }} </h1></a>
+        <p> {{ task.description }} </p>
+        <hr>
+    {% endfor %}
+{% else %}
+    <h1>Задач нет</h1>
+{% endif %}
 </body>
 </html>

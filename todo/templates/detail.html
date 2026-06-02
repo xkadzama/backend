@@ -6,9 +6,9 @@
 </head>
 <body>
 {% if task_one %}
-    <h1>{{ task_one.0.title }}</h1>
-    <p>{{ task_one.0.description }}</p>
-    <form action="{{ url_for('tasks.delete_task', id=task_one.0.id) }}" method="POST">
+    <h1>{{ task_one.title }}</h1>
+    <p>{{ task_one.description }}</p>
+    <form action="{{ url_for('tasks.delete_task', id=task_one.id) }}" method="POST">
         <button>Удалить</button>
     </form>
 {% else %}
