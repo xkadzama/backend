@@ -3,6 +3,7 @@ from todo.routes import task_bp
 
 from database.engine import db
 from database.models.todo import Task
+from database.models.auth import User
 
 app = Flask(__name__)
 
