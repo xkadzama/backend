@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Авторизация</title>
+</head>
+<body>
+<h1>Вход в аккаунт</h1>
+<form action="{{ url_for('auth.login') }}" method="POST">
+  <label>Почта: </label><input type="email" name="email"><br><br>
+  <label>Пароль:</label><input type="password" name="password"><br><br>
+  <button>Вход</button>
+</form>
+</body>
+</html>
