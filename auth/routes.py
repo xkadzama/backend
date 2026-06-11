@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, current_user, login_required
 
 from database.models.auth import User
 from database.engine import db
@@ -44,4 +44,3 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('auth.login'))
-

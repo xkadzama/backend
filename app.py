@@ -1,8 +1,8 @@
-from flask import Flask
+from flask import Flask, render_template
 from todo.routes import task_bp
 from auth.routes import auth_bp
 
-from flask_login import LoginManager # <---
+from flask_login import LoginManager, current_user
 
 from database.engine import db
 from database.models.todo import Task
@@ -29,12 +29,12 @@ with app.app_context():
 
 @login_manager.user_loader # <---
 def load_user(user_id): # <---
-    return User.query.filter_by(id=int(user_id)).first() # <---
+    return User.query.filter_by(id=int(user_id)).first() # <--- user
 
 
 @app.route('/')
 def main():
-    return '<h1> Главная страница! </h1>'
+    return render_template('main.html', current_user=current_user)
 
 
 if __name__ == '__main__':

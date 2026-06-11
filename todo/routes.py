@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 
+from flask_login import login_required
+
 from database.engine import db
 from database.models.todo import Task
 
@@ -8,7 +10,9 @@ task_bp = Blueprint('tasks', __name__, template_folder='templates')
 
 
 # READ
+
 @task_bp.route('/')  # tasks/
+@login_required
 def get_all_tasks():
     tasks = Task.query.all()
     return render_template('tasks.html', tasks_db=tasks)
@@ -16,6 +20,7 @@ def get_all_tasks():
 
 # READ
 @task_bp.route('/task/<int:id>') # tasks/task/<int:id>
+@login_required
 def detail_task(id):
     task = Task.query.filter_by(id=id).first() # <---
     return render_template('detail.html', task_one=task)
@@ -23,6 +28,7 @@ def detail_task(id):
 
 # CREATE
 @task_bp.route('/add', methods=['GET', 'POST'])  # /tasks/add
+@login_required
 def add_task():
     if request.method == 'POST':
         title = request.form.get('title')
@@ -35,6 +41,7 @@ def add_task():
 
 # UPDATE
 @task_bp.route('/update/<int:id>', methods=['GET', 'POST'])
+@login_required
 def update_task(id):
     task = Task.query.filter_by(id=id).first() # <---
     # ---------------- POST -------------------
@@ -52,6 +59,7 @@ def update_task(id):
 
 # DELETE
 @task_bp.route('/delete/<int:id>', methods=['POST'])
+@login_required
 def delete_task(id):
     task = Task.query.filter_by(id=id).first()  # <---
     db.session.delete(task) # <---
