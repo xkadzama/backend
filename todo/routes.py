@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 
-from flask_login import login_required
+from flask_login import login_required, current_user
 
 from database.engine import db
 from database.models.todo import Task
@@ -9,12 +9,12 @@ from database.models.todo import Task
 task_bp = Blueprint('tasks', __name__, template_folder='templates')
 
 
-# READ
+# Сделать отображение задач только для авторов этих задач
 
 @task_bp.route('/')  # tasks/
 @login_required
 def get_all_tasks():
-    tasks = Task.query.all()
+    tasks = Task.query.filter_by(user_id=current_user.id).all()
     return render_template('tasks.html', tasks_db=tasks)
 
 
@@ -33,7 +33,7 @@ def add_task():
     if request.method == 'POST':
         title = request.form.get('title')
         description = request.form.get('description')
-        task = Task(title=title, description=description) # <---
+        task = Task(title=title, description=description, user_id=current_user.id) # <---
         db.session.add(task) # <---
         db.session.commit() # <---
         return redirect(url_for('tasks.get_all_tasks'))
