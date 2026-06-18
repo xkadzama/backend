@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from todo.routes import task_bp
 from auth.routes import auth_bp
+from profiles.routes import profile_bp
 
 from flask_login import LoginManager, current_user
 
@@ -21,6 +22,7 @@ login_manager.init_app(app) # <---
 
 app.register_blueprint(task_bp, url_prefix='/tasks')
 app.register_blueprint(auth_bp, url_prefix='/auth')
+app.register_blueprint(profile_bp, url_prefix='/profile')
 
 
 with app.app_context():
